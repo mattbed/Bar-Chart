@@ -2,13 +2,29 @@
 <html lang="en">
 
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Bar Chart</title>
     <link rel="stylesheet" href="/styles/main.css" type="text/css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="/scripts/main.js"></script>
   </head>
 
   <body>
+    <main class="container">
+      <section class="title">
+        <h1>Placeholder Title</h1>
+      </section>
+      <section class="body">
+        <!-- Dynamic elements: width, height, background -->
+        <div class="table-border" style="display: flex; flex-direction: row; justify-content: space-evenly; align-items:flex-end; width: 500px; height: 500px; background: lightgray; border: 2px solid black;">
+          <!-- Dynamic elements: width, height, background-->
+          <div class="table-bar" style="width:45%; height:80px; background: blue; border: 1px solid black; margin: 2px;"></div>
+          <div class="table-bar" style="width:45%; height:40px; background: red; border: 1px solid black; margin: 2px;"></div>
+        </div>
+      </section>
+    </main>
   </body>
 
 </html>
