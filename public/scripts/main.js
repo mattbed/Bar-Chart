@@ -1,11 +1,9 @@
 const drawBarChart = function(data, options, element) {
+  const title = parseTitle(options);
   const $output=`<main class="container">
   <!-- Dynamic elements: width, height -->
   <section class="outer-container" style="width: 500px; height: 500px;">
-    <section class="title">
-      <!-- Dynamic elements: font-size, color-->
-      <p style="font-size: 16px; color: darkblue;">Placeholder Title</h1>
-    </section>
+    ${title}
     <section class="main">
       <section class="y-axis">
         <div class="label-container">
@@ -44,5 +42,25 @@ const drawBarChart = function(data, options, element) {
   </section>
 </main>`;
 $(element).append($output);
+};
+
+const parseData = function(data) {
+
+}
+
+const parseTitle = function(options) {
+  let parsedTitle = ""
+  if (options.title) {
+    parsedTitle = `<section class="title">
+      <!-- Dynamic elements: font-size, color, font-family, VALUE-->
+      <p style="
+      ${(options.titleFontSize ? "font-size: " + options.titleFontSize + "px;" : "font-size: 16px;")}
+      ${(options.titleFontColour ? "color: " + options.titleFontColour + ";" : "color: black;")}
+      ${(options.titleFont ? "font-family: " + options.titleFont + ";" : "")}">
+      ${options.title}
+      </p>
+    </section>`
+  }
+  return parsedTitle;
 }
 

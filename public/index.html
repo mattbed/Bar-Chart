@@ -17,7 +17,12 @@
     </div>
         <script type="text/javascript">
       const data=[20,40,60];
-      const options={};
+      const options={
+        title: "Test title",
+        titleFont: "Arial",
+        titleFontSize: 20,
+        titleFontColour: "orange",
+      };
       const element=chart;
       $(() => {
       drawBarChart(data, options, element);
