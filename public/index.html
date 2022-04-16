@@ -6,51 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Bar Chart</title>
-    <link rel="stylesheet" href="/styles/main.css" type="text/css" />
+    <link rel="stylesheet" href="./styles/main.css" type="text/css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="/scripts/main.js"></script>
+    <script type="text/javascript" src="./scripts/main.js"></script>
   </head>
 
   <body>
     <main class="container">
       <!-- Dynamic elements: width, height -->
-      <section class="body" style="display: flex; flex-direction: column; width: 500px; height: 500px;">
+      <section class="outer-container" style="width: 500px; height: 500px;">
         <section class="title">
           <!-- Dynamic elements: font-size, color-->
-          <p style="font-size: 16px; color: darkblue; text-align: center;">Placeholder Title</h1>
+          <p style="font-size: 16px; color: darkblue;">Placeholder Title</h1>
         </section>
-        <section class="main" style="display: flex; height: 100%;">
-          <section class="y-axis" style="display: flex; justify-content: flex-end; height: 90%; width: 10%;">
-            <div class="stick-container" style="display: flex; flex-direction: column; justify-content: space-around; height: 100%; margin: 0;">
+        <section class="main">
+          <section class="y-axis">
+            <div class="label-container">
               <!-- Dynamic elements: label-values -->
-              <span class="stick" style="flex-grow: 1; border-top: 2px solid black">
+              <span class="label">
                 <span class="label-value">100</span>
               </span>
-              <span class="stick" style="flex-grow: 1; border-top: 2px solid black">
+              <span class="label">
                 <span class="label-value">80</span>
               </span>
-              <span class="stick" style="flex-grow: 1; border-top: 2px solid black">
+              <span class="label">
                 <span class="label-value">60</span>
               </span>
-              <span class="stick" style="flex-grow: 1; border-top: 2px solid black">
+              <span class="label">
                 <span class="label-value">40</span>
               </span>
-              <span class="stick" style="flex-grow: 1; border-top: 2px solid black">
+              <span class="label">
                 <span class="label-value">20</span>
               </span>
             </div>
           </section>
-          <section class="graph" style="display: flex; flex-direction: column; flex-grow: 9;">
+          <section class="graph">
             <!-- Dynamic elements: background -->
-            <div class="table-border" style="flex-grow: 9; display: flex; flex-direction: row; justify-content: space-evenly; align-items:flex-end; background: lightgray; border: 2px solid black;">
+            <div class="table-border" style="background: lightgray;">
               <!-- Dynamic elements: .table-bar- width, height, background, align-items   .table-value- background, value -->
-              <div class="table-bar" style="display: flex; justify-content: center; align-items: flex-start; width: 45%; height: 80%; background: blue; border: 1px solid black;"><div class="table-value" style="background: white;">80</div></div>
-              <div class="table-bar" style="display: flex; justify-content: center; align-items: flex-end; width: 45%; height: 40%; background: red; border: 1px solid black;"><div class="table-value" style="background: white;">40</div></div>
+              <div class="table-bar" style="align-items: flex-start; width: 45%; height: 80%; background: blue;"><div class="table-value" style="background: white;">80</div></div>
+              <div class="table-bar" style="align-items: flex-end; width: 45%; height: 40%; background: red;"><div class="table-value" style="background: white;">40</div></div>
             </div>
             <!-- Dynamic elements: label-values -->
-            <section class="x-axis" style="display: flex; flex-direction: row; justify-content: space-around; width: 100%; height: 10%;">
-                <span class="label-value" style="flex-grow: 1; text-align: center;">blue</span>
-                <span class="label-value" style="flex-grow: 1; text-align: center;">red</span>
+            <section class="x-axis">
+                <span class="label-value">blue</span>
+                <span class="label-value">red</span>
             </section>
           </section>
         </section>
