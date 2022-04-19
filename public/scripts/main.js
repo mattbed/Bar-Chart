@@ -1,5 +1,6 @@
 const drawBarChart = function(data, options, element) {
   const title = parseTitle(options);
+  const tableSetup = parseTableSetup(options);
   const $output=`<main class="container">
   <!-- Dynamic elements: width, height -->
   <section class="outer-container" style="width: 500px; height: 500px;">
@@ -26,8 +27,7 @@ const drawBarChart = function(data, options, element) {
         </div>
       </section>
       <section class="graph">
-        <!-- Dynamic elements: background -->
-        <div class="table-border" style="background: lightgray;">
+        ${tableSetup}
           <!-- Dynamic elements: .table-bar- width, height, background, align-items   .table-value- background, value -->
           <div class="table-bar" style="align-items: flex-start; width: 45%; height: 80%; background: blue;"><div class="table-value" style="background: white;">80</div></div>
           <div class="table-bar" style="align-items: flex-end; width: 45%; height: 40%; background: red;"><div class="table-value" style="background: white;">40</div></div>
@@ -46,6 +46,16 @@ $(element).append($output);
 
 const parseData = function(data) {
 
+}
+
+const parseTableSetup = function(options) {
+  let parsedTable = `<!-- Dynamic elements: background -->
+  <div class="table-border" style="background: lightgray;">`
+  if (options.tableBackground) {
+    parsedTable = `<!-- Dynamic elements: background -->
+    <div class="table-border" style="background: ${options.tableBackground};">`
+  }
+  return parsedTable;
 }
 
 const parseTitle = function(options) {
