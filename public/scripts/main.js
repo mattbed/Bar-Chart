@@ -51,9 +51,17 @@ const sortData = function(data, options) {
   let sortedData = data;
   if (options.sort) {
     if (options.sort === "asc") {
-      // sort data ascending
+      if (isObject(data[0])) {
+        sortedData.sort((a, b) => a.value - b.value);
+      } else if (!isObject(data[0])) {
+        sortedData.sort((a, b) => a - b);
+      }
     } else if (options.sort === "des") {
-      // sort data descending
+      if (isObject(data[0])) {
+        sortedData.sort((a, b) => b.value - a.value);
+      } else if (!isObject(data[0])) {
+        sortedData.sort((a, b) => b - a);
+      }
     }
   }
   return sortedData;
@@ -73,7 +81,7 @@ const parseXAxis = function(data) {
     parsedXAxis = `<!-- Dynamic elements: label-values -->
     <section class="x-axis">
       ${data.map((element) => {
-        return `<span class="label-value">${Object.keys(element)[0]}</span>`
+        return `<span class="label-value">${element.name}</span>`
       }).join('')}
     </section>`
   }
@@ -108,3 +116,8 @@ const parseTitle = function(options) {
   return parsedTitle;
 }
 
+// FIX EVENTUALLY
+// list of edge cases and other fixes to work on eventually
+// - check data inputs to see that they are all proper key/value pairs or all just values
+// - check that all values are proper numbers
+// - test improper values being input across the board. Does it break everything? Does it throw an error? Should it?

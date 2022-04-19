@@ -16,14 +16,26 @@
 
     </div>
         <script type="text/javascript">
-      const data=[{A:20}, {B:50}, {C:95}];      //  mandatory (array of numbers as values or array of objects with titles as keys and numbers as values)
+      const data=[
+          {
+            name: "A",
+            value: 20,
+          },
+          {
+            name: "B",
+            value:50,
+          },
+          {
+            name: "C",
+            value:95,
+          }];                                   //  mandatory (array of numbers as values or array of objects with titles as keys and numbers as values)
       const options={
         title: "Test title",                    //  optional (default is no title)
         titleFont: "Arial",                     //  optional (default is browser default)
         titleFontSize: 20,                      //  optional (default is 16)
         titleFontColour: "orange",              //  optional (default is black)
         tableBackground: "pink",                //  optional (default is lightgray)
-        sort: "asc",                            //  optional (default is false) (sort data, possible values are "asc", "des" or false)
+        sort: "des",                            //  optional (default is false) (sort data, possible values are "asc", "des" or false)
       };
       const element=chart;
       $(() => {
