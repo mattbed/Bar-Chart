@@ -1,7 +1,7 @@
 const drawBarChart = function(data, options, element) {
   const parsedData = sortData(data, options);
   const title = parseTitle(options);
-  const tableSetup = parseTableSetup(options);
+  const graphSetup = parseGraphSetup(options);
   const XAxis = parseXAxis(parsedData);
   const container = setGraphContainer(options);
   const $output=`<main class="container">
@@ -29,10 +29,10 @@ const drawBarChart = function(data, options, element) {
         </div>
       </section>
       <section class="graph">
-        ${tableSetup}
-          <!-- Dynamic elements: .table-bar- width, height, background, align-items   .table-value- background, value -->
-          <div class="table-bar" style="align-items: flex-start; width: 45%; height: 80%; background: blue;"><div class="table-value" style="background: white;">80</div></div>
-          <div class="table-bar" style="align-items: flex-end; width: 45%; height: 40%; background: red;"><div class="table-value" style="background: white;">40</div></div>
+        ${graphSetup}
+          <!-- Dynamic elements: .graph-bar- width, height, background, align-items   .graph-value- background, value -->
+          <div class="graph-bar" style="align-items: flex-start; width: 45%; height: 80%; background: blue;"><div class="graph-value" style="background: white;">80</div></div>
+          <div class="graph-bar" style="align-items: flex-end; width: 45%; height: 40%; background: red;"><div class="graph-value" style="background: white;">40</div></div>
         </div>
         ${XAxis}
       </section>
@@ -96,14 +96,14 @@ const parseXAxis = function(data) {
 }
 
 // returns basic table setup with background color if included, or lightgray as default if not
-const parseTableSetup = function(options) {
-  let parsedTable = `<!-- Dynamic elements: background -->
-  <div class="table-border" style="background: lightgray;">`
-  if (options.tableBackground) {
-    parsedTable = `<!-- Dynamic elements: background -->
-    <div class="table-border" style="background: ${options.tableBackground};">`
+const parseGraphSetup = function(options) {
+  let parsedGraph = `<!-- Dynamic elements: background -->
+  <div class="graph-border" style="background: lightgray;">`
+  if (options.graphBackground) {
+    parsedGraph = `<!-- Dynamic elements: background -->
+    <div class="graph-border" style="background: ${options.graphBackground};">`
   }
-  return parsedTable;
+  return parsedGraph;
 }
 
 // returns properly parsed title with attributes as included, or default values if not - nothing returned if no title is included
