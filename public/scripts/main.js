@@ -1,6 +1,8 @@
 const drawBarChart = function(data, options, element) {
+  const parsedData = sortData(data, options);
   const title = parseTitle(options);
   const tableSetup = parseTableSetup(options);
+  const XAxis = parseXAxis(parsedData);
   const $output=`<main class="container">
   <!-- Dynamic elements: width, height -->
   <section class="outer-container" style="width: 500px; height: 500px;">
@@ -32,11 +34,7 @@ const drawBarChart = function(data, options, element) {
           <div class="table-bar" style="align-items: flex-start; width: 45%; height: 80%; background: blue;"><div class="table-value" style="background: white;">80</div></div>
           <div class="table-bar" style="align-items: flex-end; width: 45%; height: 40%; background: red;"><div class="table-value" style="background: white;">40</div></div>
         </div>
-        <!-- Dynamic elements: label-values -->
-        <section class="x-axis">
-            <span class="label-value">blue</span>
-            <span class="label-value">red</span>
-        </section>
+        ${XAxis}
       </section>
     </section>
   </section>
@@ -46,6 +44,34 @@ $(element).append($output);
 
 const parseData = function(data) {
 
+}
+
+const sortData = function(data, options) {
+  let sortedData = data;
+  if (options.sort) {
+    if (options.sort === "asc") {
+      // sort data ascending
+    } else if (options.sort === "des") {
+      // sort data descending
+    }
+  }
+  return sortedData;
+}
+
+const parseXAxis = function(data) {
+  let parsedXAxis = ""
+  const isObject = function(objValue) {
+    return objValue && typeof objValue === 'object' && objValue.constructor === Object;
+  };
+  if (isObject(data[0])) {
+    parsedXAxis = `<!-- Dynamic elements: label-values -->
+    <section class="x-axis">
+      ${data.map((element) => {
+        return `<span class="label-value">${Object.keys(element)[0]}</span>`
+      }).join('')}
+    </section>`
+  }
+  return parsedXAxis;
 }
 
 const parseTableSetup = function(options) {
