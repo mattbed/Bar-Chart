@@ -3,9 +3,9 @@ const drawBarChart = function(data, options, element) {
   const title = parseTitle(options);
   const tableSetup = parseTableSetup(options);
   const XAxis = parseXAxis(parsedData);
+  const container = setGraphContainer(options);
   const $output=`<main class="container">
-  <!-- Dynamic elements: width, height -->
-  <section class="outer-container" style="width: 500px; height: 500px;">
+  ${container}
     ${title}
     <section class="main">
       <section class="y-axis">
@@ -71,6 +71,13 @@ const sortData = function(data, options) {
 const isObject = function(objValue) {
     return objValue && typeof objValue === 'object' && objValue.constructor === Object;
 };
+
+// applies input height and width to overall bounding box, defaults to 500 if not given
+const setGraphContainer = function(options) {
+  let parsedContainer = `<!-- Dynamic elements: width, height -->
+  <section class="outer-container" style="width: ${(options.width ? options.width : 500)}px; height: ${options.height ? options.height : 500}px;">`
+  return parsedContainer;
+}
 
 // parses labels for x axis, returns parsed labels if present, otherwise returns empty container
 const parseXAxis = function(data) {
