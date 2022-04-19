@@ -46,6 +46,7 @@ const parseData = function(data) {
 
 }
 
+// sort Data if sort = "asc" (ascending) or sort = "des" (descending), do not sort if sort is omitted or false
 const sortData = function(data, options) {
   let sortedData = data;
   if (options.sort) {
@@ -58,11 +59,16 @@ const sortData = function(data, options) {
   return sortedData;
 }
 
-const parseXAxis = function(data) {
-  let parsedXAxis = ""
-  const isObject = function(objValue) {
+// checks if object is a true object or not (typeof returns true for array, null, etc.)
+const isObject = function(objValue) {
     return objValue && typeof objValue === 'object' && objValue.constructor === Object;
-  };
+};
+
+// parses labels for x axis, returns parsed labels if present, otherwise returns empty container
+const parseXAxis = function(data) {
+  let parsedXAxis = `<!-- Dynamic elements: label-values -->
+  <section class="x-axis">
+  </section>`
   if (isObject(data[0])) {
     parsedXAxis = `<!-- Dynamic elements: label-values -->
     <section class="x-axis">
@@ -74,6 +80,7 @@ const parseXAxis = function(data) {
   return parsedXAxis;
 }
 
+// returns basic table setup with background color if included, or lightgray as default if not
 const parseTableSetup = function(options) {
   let parsedTable = `<!-- Dynamic elements: background -->
   <div class="table-border" style="background: lightgray;">`
@@ -84,6 +91,7 @@ const parseTableSetup = function(options) {
   return parsedTable;
 }
 
+// returns properly parsed title with attributes as included, or default values if not - nothing returned if no title is included
 const parseTitle = function(options) {
   let parsedTitle = ""
   if (options.title) {
