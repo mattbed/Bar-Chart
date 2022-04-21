@@ -4,30 +4,12 @@ const drawBarChart = function(data, options, element) {
   const graphSetup = parseGraphSetup(options);
   const XAxis = parseXAxis(parsedData);
   const container = setGraphContainer(options);
+  const YAxis = setYAxis(data);
   const $output=`<main class="container">
   ${container}
     ${title}
     <section class="main">
-      <section class="y-axis">
-        <div class="label-container">
-          <!-- Dynamic elements: label-values -->
-          <span class="label">
-            <span class="label-value">100</span>
-          </span>
-          <span class="label">
-            <span class="label-value">80</span>
-          </span>
-          <span class="label">
-            <span class="label-value">60</span>
-          </span>
-          <span class="label">
-            <span class="label-value">40</span>
-          </span>
-          <span class="label">
-            <span class="label-value">20</span>
-          </span>
-        </div>
-      </section>
+      ${YAxis}
       <section class="graph">
         ${graphSetup}
           <!-- Dynamic elements: .graph-bar- width, height, background, align-items   .graph-value- background, value -->
@@ -123,8 +105,61 @@ const parseTitle = function(options) {
   return parsedTitle;
 }
 
+// Sets default value Y axis (5 tick marks, max value +10% rounded up to nearest 10)
+// Needs refactoring!! Needs dynamic input!!
+const setYAxis = function(data) {
+  // find max value
+  let maxValue = 0;
+  if (isObject(data[0])) {
+    data.forEach((element) => {
+      if (element.value > maxValue) {
+        maxValue = element.value;
+      }
+    });
+  }
+  if (!isObject(data[0])) {
+    data.forEach((element) => {
+      if (element > maxValue) {
+        maxValue = element;
+      }
+    });
+  }
+  // increase max value by 10% (*1.1)
+  maxValue = Math.floor(maxValue * 1.1);
+  // round up to nearest whole number that is a multiple of 10
+  // set this as the max value for the Y axis
+  while ((maxValue % 10) !== 0) {
+    maxValue++;
+  }
+  // number of marks
+  const ticks = 5;
+  const YValues = [];
+  for (let x = 1; x <= ticks; x++) {
+    // divide by 5 to get a default set of Y axis markers (x = max value/5 will get the first waypoint, 2x, 3x, 4x will be the next steps)
+    let value = (maxValue/ticks)*x;
+    YValues.unshift(value);
+  };
+  // map through and set each waypoint at the corresponding marker
+  parsedYAxis = `
+    <section class="y-axis">
+      <div class="label-container">
+      <!-- Dynamic elements: label-values -->
+        ${YValues.map((element) => {
+        return `<span class="label">
+        <span class="label-value">${element}</span>
+        </span>`}).join('')}
+      </div>
+    </section>`;
+  return parsedYAxis;
+}
+
 // FIX EVENTUALLY
 // list of edge cases and other fixes to work on eventually
 // - check data inputs to see that they are all proper key/value pairs or all just values
 // - check that all values are proper numbers
 // - test improper values being input across the board. Does it break everything? Does it throw an error? Should it?
+
+// STRETCH FEATURES
+// animations/prettification
+// custom min/max values for y axis
+// stacked bar graph? combined bars? etc.
