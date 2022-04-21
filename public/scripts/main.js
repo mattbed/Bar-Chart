@@ -2,21 +2,19 @@ const drawBarChart = function(data, options, element) {
   const parsedData = sortData(data, options);
   const title = parseTitle(options);
   const graphSetup = parseGraphSetup(options);
-  const XAxis = parseXAxis(parsedData);
+  const xAxis = parseXAxis(parsedData);
   const container = setGraphContainer(options);
-  const YAxis = setYAxis(data, options);
+  const yAxis = setYAxis(data, options);
+  const graphData = parseData(parsedData, options);
   const $output=`<main class="container">
   ${container}
     ${title}
     <section class="main">
-      ${YAxis}
+      ${yAxis}
       <section class="graph">
         ${graphSetup}
-          <!-- Dynamic elements: .graph-bar- width, height, background, align-items   .graph-value- background, value -->
-          <div class="graph-bar" style="align-items: flex-start; width: 45%; height: 80%; background: blue;"><div class="graph-value" style="background: white;">80</div></div>
-          <div class="graph-bar" style="align-items: flex-end; width: 45%; height: 40%; background: red;"><div class="graph-value" style="background: white;">40</div></div>
-        </div>
-        ${XAxis}
+          ${graphData}
+        ${xAxis}
       </section>
     </section>
   </section>
@@ -24,8 +22,42 @@ const drawBarChart = function(data, options, element) {
 $(element).append($output);
 };
 
-const parseData = function(data) {
-
+// pseudocode for data parser
+const parseData = function(data, options) {
+// set vertical alignment of data value if present (default center) to variable. include in output if not toggled false.
+const alignValue = () => {
+  if (options.dataAlign === "top") return "flex-start";
+  if (options.dataAlign === "mid") return "center";
+  if (options.dataAlign === "bot") return "flex-end";
+};
+const dataAlign = ( options.dataAlign ? `align-items: ${alignValue()};` : `align-items: center;`);
+// set background colour of data value display to default white unless included otherwise
+const dataColour = ( options.dataColour ? `background: ${options.dataColour};` : `background: white;`);
+// fetch maxValue (refactor?) of y axis
+let maxValue = maxValueCalc(data, options);
+// calculate width by dividing 100 by # of data points, then obtaining 90% of that value, add to dataset array
+const width = Math.round(((100 / (data.length)) * ( options.barGap >= 0 && options.barGap <= 100 ? (100 - options.barGap) / 100 : 0.9)) * 100) / 100;
+// create new dataset array (array of objects) with data values out of 100 (%) based on percent of maxValue
+let dataSet = [];
+const colourPalette = ["red", "blue", "green", "orange", "purple", "yellow", "pink", "brown"]
+data.map((element, index) => {
+  const tempContainer = {};
+  actualValue = (isObject(data[0]) ? element.value : element);
+  tempContainer.height = Math.round((actualValue / maxValue) * 10000) / 100;
+  tempContainer.value = actualValue;
+  tempContainer.colour = (element.colour ? element.colour : colourPalette[index]);
+  dataSet.push(tempContainer);
+});
+// set up default colour scheme and cycle through dataset array, attaching colour to each
+// create output by mapping through dataset array and mapping through data values (for data value display) if not toggled false
+const parsedGraphData =
+`<!-- Dynamic elements: .graph-bar- width, height, background, align-items   .graph-value- background, value -->
+${dataSet.map((element) => {
+  return `<div class="graph-bar" style="${dataAlign}; width: ${width}%; height: ${element.height}%; background: ${element.colour};">
+  <div class="graph-value" style="${dataColour};">${element.value}</div></div>`
+}).join('')}
+</div>`;
+return parsedGraphData;
 }
 
 // sort Data if sort = "asc" (ascending) or sort = "des" (descending), do not sort if sort is omitted or false
@@ -105,35 +137,39 @@ const parseTitle = function(options) {
   return parsedTitle;
 }
 
+// returns max value of y axis based on input or default value (max dataset value +10% rounded up to nearest 10)
+const maxValueCalc = function(data, options) {
+  let maxValue = options.yAxisMaxValue;
+    if (!options.yAxisMaxValue) {
+      maxValue = 0;
+      // find max value
+      if (isObject(data[0])) {
+        data.forEach((element) => {
+          if (element.value > maxValue) {
+            maxValue = element.value;
+          }
+        });
+      }
+      if (!isObject(data[0])) {
+        data.forEach((element) => {
+          if (element > maxValue) {
+            maxValue = element;
+          }
+        });
+      }
+      // increase max value by 10% (*1.1)
+      maxValue = Math.floor(maxValue * 1.1);
+      // round up to nearest whole number that is a multiple of 10
+      while ((maxValue % 10) !== 0) {
+        maxValue++;
+      }
+    };
+    return maxValue;
+};
+
 // Sets Y axis values and tickmarks (default is 5 tick marks, max value +10% rounded up to nearest 10 - these are customizable)
 const setYAxis = function(data, options) {
-  let maxValue = 0;
-  if (!options.yAxisMaxValue) {
-    // find max value
-    if (isObject(data[0])) {
-      data.forEach((element) => {
-        if (element.value > maxValue) {
-          maxValue = element.value;
-        }
-      });
-    }
-    if (!isObject(data[0])) {
-      data.forEach((element) => {
-        if (element > maxValue) {
-          maxValue = element;
-        }
-      });
-    }
-    // increase max value by 10% (*1.1)
-    maxValue = Math.floor(maxValue * 1.1);
-    // round up to nearest whole number that is a multiple of 10
-    while ((maxValue % 10) !== 0) {
-      maxValue++;
-    }
-  };
-  if (options.yAxisMaxValue) {
-    maxValue = options.yAxisMaxValue;
-  };
+  let maxValue = maxValueCalc(data, options);
   // number of marks
   const ticks = options.yAxisTicks || 5;
   const YValues = [];
@@ -156,6 +192,7 @@ const setYAxis = function(data, options) {
   return parsedYAxis;
 }
 
+
 // FIX EVENTUALLY
 // list of edge cases and other fixes to work on eventually
 // - check data inputs to see that they are all proper key/value pairs or all just values
@@ -164,5 +201,6 @@ const setYAxis = function(data, options) {
 
 // STRETCH FEATURES
 // animations/prettification
-// custom min/max values for y axis
+// custom min value for y axis
 // stacked bar graph? combined bars? etc.
+// add color schemes for bars to choose from
