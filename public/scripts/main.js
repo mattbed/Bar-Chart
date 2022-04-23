@@ -1,5 +1,6 @@
 const drawBarChart = function(data, options, element) {
-  const parsedData = sortData(data, options);
+  const stackedData = checkStackedBar(data);
+  const parsedData = sortData(stackedData, options);
   const title = parseTitle(options);
   const graphSetup = parseGraphSetup(options);
   const xAxis = parseXAxis(parsedData);
@@ -22,7 +23,55 @@ const drawBarChart = function(data, options, element) {
 $(element).append($output);
 };
 
-// pseudocode for data parser
+// adds total of all stacked elements under the value key
+const sumValues = function(data) {
+  let totalValue = 0;
+  let index = 1;
+  while (!isNaN(data[`value${index}`])) {
+    totalValue += data[`value${index}`];
+    index++;
+  }
+  return totalValue;
+}
+
+
+// checks if there is multiple values per bar (stacked bar graph), if so adds a total value column with sum of the values
+const checkStackedBar = function(data) {
+  const parsedStackedBar = data;
+  data.forEach((element) => {
+    if (!element.value) {
+      element.value = sumValues(element);
+      element.stack = true;
+    }
+  });
+  return parsedStackedBar;
+}
+
+const bars = function(data, dataAlign, dataColour) {
+  let barOutput = "";
+  if (!data.stack) {
+    barOutput = `
+    <div class="graph-bar" style="${dataAlign} height: 100%; width: 100%;">
+      <div class="graph-value" style="${dataColour}">${data.value}</div>
+    </div>`
+  }
+  if (data.stack) {
+    let index = 1;
+    while (!isNaN(data[`value${index}`])) {
+      barHeight = (data[`value${index}`] / data.value) * 100;
+      barValue = data[`value${index}`];
+      barColour = data[`colour${index}`];
+      barOutput = barOutput + `
+      <div class="graph-bar" style="${dataAlign} height: ${barHeight}%; width: 100%; background: ${barColour};">
+        <div class="graph-value" style="${dataColour}">${barValue}</div>
+      </div>`;
+      index++;
+    }
+  }
+  return barOutput;
+}
+
+// takes data, and options for data display (if given), and outputs appropriately sized/styled bars
 const parseData = function(data, options) {
 // set vertical alignment of data value if present (default center) to variable. include in output if not toggled false.
 const alignValue = () => {
@@ -33,7 +82,7 @@ const alignValue = () => {
 const dataAlign = ( options.dataAlign ? `align-items: ${alignValue()};` : `align-items: center;`);
 // set background colour of data value display to default white unless included otherwise
 const dataColour = ( options.dataColour ? `background: ${options.dataColour};` : `background: white;`);
-// fetch maxValue (refactor?) of y axis
+// fetch maxValue of y axis
 let maxValue = maxValueCalc(data, options);
 // calculate width by dividing 100 by # of data points, then obtaining 90% of that value, add to dataset array
 const width = Math.round(((100 / (data.length)) * ( options.barGap >= 0 && options.barGap <= 100 ? (100 - options.barGap) / 100 : 0.9)) * 100) / 100;
@@ -46,6 +95,16 @@ data.map((element, index) => {
   tempContainer.height = Math.round((actualValue / maxValue) * 10000) / 100;
   tempContainer.value = actualValue;
   tempContainer.colour = (element.colour ? element.colour : colourPalette[index]);
+  if (element.stack) {
+    tempContainer.stack = true;
+    let counter = 1;
+    while (!isNaN(element[`value${counter}`])) {
+      let opacityVar = 30 + (30 * counter);
+      tempContainer[`value${counter}`] = element[`value${counter}`];
+      tempContainer[`colour${counter}`] = (element[`colour${counter}`] ? element[`colour${counter}`] : `${tempContainer.colour}; filter: saturate(${opacityVar}%);`)
+      counter++;
+    }
+  }
   dataSet.push(tempContainer);
 });
 // set up default colour scheme and cycle through dataset array, attaching colour to each
@@ -53,8 +112,8 @@ data.map((element, index) => {
 const parsedGraphData =
 `<!-- Dynamic elements: .graph-bar- width, height, background, align-items   .graph-value- background, value -->
 ${dataSet.map((element) => {
-  return `<div class="graph-bar" style="${dataAlign}; width: ${width}%; height: ${element.height}%; background: ${element.colour};">
-  <div class="graph-value" style="${dataColour};">${element.value}</div></div>`
+  return `<div class="graph-bar" style="flex-wrap: wrap; width: ${width}%; height: ${element.height}%; background: ${element.colour}">${bars(element, dataAlign, dataColour)}
+  </div>`
 }).join('')}
 </div>`;
 return parsedGraphData;
