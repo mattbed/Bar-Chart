@@ -50,7 +50,15 @@
 
 .graph-bar {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+}
+
+.graph-bar-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
 }
 
 .x-axis {

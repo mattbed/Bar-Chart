@@ -51,18 +51,19 @@ const bars = function(data, dataAlign, dataColour) {
   let barOutput = "";
   if (!data.stack) {
     barOutput = `
-    <div class="graph-bar" style="${dataAlign} height: 100%; width: 100%;">
+    <div class="graph-bar-inner" style="${dataAlign} height: 100%;">
       <div class="graph-value" style="${dataColour}">${data.value}</div>
     </div>`
   }
   if (data.stack) {
     let index = 1;
     while (!isNaN(data[`value${index}`])) {
-      barHeight = (data[`value${index}`] / data.value) * 100;
       barValue = data[`value${index}`];
+      barHeight = (barValue / data.value) * 100;
       barColour = data[`colour${index}`];
-      barOutput = barOutput + `
-      <div class="graph-bar" style="${dataAlign} height: ${barHeight}%; width: 100%; background: ${barColour};">
+      barOutput =
+      `${barOutput}
+      <div class="graph-bar-inner" style="${dataAlign} height: ${barHeight}%; background: ${barColour};">
         <div class="graph-value" style="${dataColour}">${barValue}</div>
       </div>`;
       index++;
@@ -112,7 +113,7 @@ data.map((element, index) => {
 const parsedGraphData =
 `<!-- Dynamic elements: .graph-bar- width, height, background, align-items   .graph-value- background, value -->
 ${dataSet.map((element) => {
-  return `<div class="graph-bar" style="flex-wrap: wrap; width: ${width}%; height: ${element.height}%; background: ${element.colour}">${bars(element, dataAlign, dataColour)}
+  return `<div class="graph-bar" style="width: ${width}%; height: ${element.height}%; background: ${element.colour}">${bars(element, dataAlign, dataColour)}
   </div>`
 }).join('')}
 </div>`;
@@ -265,3 +266,4 @@ const setYAxis = function(data, options) {
 // stacked bar graph? combined bars? etc.
 // add color schemes for bars to choose from (ie new colour palettes)
 // customizable label features, including colours for individual bars
+// add legend for stacked bar graph
