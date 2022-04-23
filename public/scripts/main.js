@@ -39,7 +39,7 @@ let maxValue = maxValueCalc(data, options);
 const width = Math.round(((100 / (data.length)) * ( options.barGap >= 0 && options.barGap <= 100 ? (100 - options.barGap) / 100 : 0.9)) * 100) / 100;
 // create new dataset array (array of objects) with data values out of 100 (%) based on percent of maxValue
 let dataSet = [];
-const colourPalette = ["red", "blue", "green", "orange", "purple", "yellow", "pink", "brown"]
+const colourPalette = ["red", "blue", "green", "orange", "purple", "yellow", "pink", "brown", "aqua", "fuchsia", "chartreuse", "rosybrown"]
 data.map((element, index) => {
   const tempContainer = {};
   actualValue = (isObject(data[0]) ? element.value : element);
@@ -98,7 +98,7 @@ const parseXAxis = function(data) {
   let parsedXAxis = `<!-- Dynamic elements: label-values -->
   <section class="x-axis">
   </section>`
-  if (isObject(data[0])) {
+  if (data[0].name) {
     parsedXAxis = `<!-- Dynamic elements: label-values -->
     <section class="x-axis">
       ${data.map((element) => {
@@ -196,6 +196,7 @@ const setYAxis = function(data, options) {
 // FIX EVENTUALLY
 // list of edge cases and other fixes to work on eventually
 // - check data inputs to see that they are all proper key/value pairs or all just values
+// - current colour palette limits 12 unique entries, either add more or instill limit on values
 // - check that all values are proper numbers
 // - test improper values being input across the board. Does it break everything? Does it throw an error? Should it?
 
@@ -203,4 +204,5 @@ const setYAxis = function(data, options) {
 // animations/prettification
 // custom min value for y axis
 // stacked bar graph? combined bars? etc.
-// add color schemes for bars to choose from
+// add color schemes for bars to choose from (ie new colour palettes)
+// customizable label features, including colours for individual bars
