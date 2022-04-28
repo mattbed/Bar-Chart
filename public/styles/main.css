@@ -57,6 +57,11 @@
   width: 100%;
 }
 
+.graph-bar-label {
+  position: absolute;
+  left: 50%;
+}
+
 .x-axis {
   display: flex;
   flex-direction: row;

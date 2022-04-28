@@ -51,24 +51,24 @@ const bars = function(data, dataAlign, dataColour) {
   let barOutput = "";
   if (!data.stack) {
     barOutput = `
-    <div class="graph-bar-inner" style="height: 100%;">
-    </div>
-    <div style="${dataColour} position: absolute; left: 50%; top: ${dataAlign}%; transform: translate(-50%, -${dataAlign}%);">${data.value}</div>`
+    <div class="graph-bar-inner" style="height: 100%;"></div>
+    <div class="graph-bar-label" style="${dataColour} top: ${dataAlign}%; transform: translate(-50%, -${dataAlign}%);">${data.value}</div>
+    `;
   }
   if (data.stack) {
     let index = 1;
-    let absPos = 0;
+    let absolutePosition = 0;
     while (!isNaN(data[`value${index}`])) {
       barValue = data[`value${index}`];
       barHeight = (barValue / data.value) * 100;
       barColour = data[`colour${index}`];
-      absPosLabel = absPos + (barHeight * (dataAlign / 100))
+      absolutePositionLabel = absolutePosition + (barHeight * (dataAlign / 100));
       barOutput =
       `${barOutput}
-      <div class="graph-bar-inner" style="top: ${absPos}%; height: ${barHeight}%; background: ${barColour};"></div>
-      <div style="${dataColour} position: absolute; top: ${absPosLabel}%; left: 50%; transform: translate(-50%, -${dataAlign}%);">${barValue}</div>
+      <div class="graph-bar-inner" style="top: ${absolutePosition}%; height: ${barHeight}%; background: ${barColour};"></div>
+      <div class="graph-bar-label" style="${dataColour} top: ${absolutePositionLabel}%; transform: translate(-50%, -${dataAlign}%);">${barValue}</div>
       `;
-      absPos = absPos + barHeight;
+      absolutePosition += barHeight;
       index++;
     }
   }
@@ -264,7 +264,6 @@ const setYAxis = function(data, options) {
 // - test improper values being input across the board. Does it break everything? Does it throw an error? Should it?
 // - saturation to deliniate colours in stacked bar graph doesn't work well with many colours
 //    + at the very least change the default palette to have colours that work with it up to 6 stacks
-// - saturate also changes the label colour
 
 // STRETCH FEATURES
 // animations/prettification
