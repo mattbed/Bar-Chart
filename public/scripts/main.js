@@ -105,7 +105,7 @@ data.map((element, index) => {
     while (!isNaN(element[`value${counter}`])) {
       let opacityVar = 30 + (15 * counter);
       tempContainer[`value${counter}`] = element[`value${counter}`];
-      tempContainer[`colour${counter}`] = (element[`colour${counter}`] ? element[`colour${counter}`] : `${tempContainer.colour}; filter: saturate(${opacityVar}%);`)
+      tempContainer[`colour${counter}`] = (element[`colour${counter}`] ? element[`colour${counter}`] : `${tempContainer.colour}; filter: brightness(${opacityVar}%);`)
       counter++;
     }
   }
@@ -262,8 +262,6 @@ const setYAxis = function(data, options) {
 // - current colour palette limits 12 unique entries, either add more or instill limit on values
 // - check that all values are proper numbers
 // - test improper values being input across the board. Does it break everything? Does it throw an error? Should it?
-// - saturation to deliniate colours in stacked bar graph doesn't work well with many colours
-//    + at the very least change the default palette to have colours that work with it up to 6 stacks
 
 // STRETCH FEATURES
 // animations/prettification

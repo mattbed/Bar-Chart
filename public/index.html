@@ -16,7 +16,7 @@
 
     </div>
         <script type="text/javascript">
-          // const data=[2,54,151,111,123,12,52,94,24,59,77,180] ["red", "blue", "green", "orange", "purple", "yellow", "pink", "brown", "aqua", "fuchsia", "chartreuse", "rosybrown"]
+          // const data=[2,54,151,111,123,12,52,94,24,59,77,180]
       const data=[
           {
             name: "A",
@@ -24,7 +24,8 @@
             value2: 15,
             value3: 20,
             value4: 25,
-            colour: "red",
+            value5: 5,
+            colour: "orange",
           },
           {
             name: "B",
@@ -37,6 +38,10 @@
             colour: "orange",
           }];                                   //  mandatory (array of numbers as values or array of objects with titles as keys and numbers as values)
                                                 //  name and colour are optional. Name must be consistent: always present or always absent.
+                                                //  stacked bar graph created using value1, value2, etc. within the same data set
+                                                //  colours for stacked bar graph will be set to be different automatically using variable brightness, but becomes
+                                                //  indistinguishable after 5-10 unique entries (depending on which colour). Colours can be set manually
+                                                //  using the same method as values: colour1, colour2, etc.
       const options={
         title: "Test title",                    //  optional (default is no title)
         titleFont: "Arial",                     //  optional (default is browser default)
