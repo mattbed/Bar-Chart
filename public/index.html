@@ -16,16 +16,15 @@
 
     </div>
         <script type="text/javascript">
-          // const data=[2,54,151,111,123,12,52,94,24,59,77,180]
+          // const data=[2,54,151,111,123,12,52,94,24,59,77,180] ["red", "blue", "green", "orange", "purple", "yellow", "pink", "brown", "aqua", "fuchsia", "chartreuse", "rosybrown"]
       const data=[
           {
             name: "A",
-            value1: 20,
-            value2: 10,
-            value3: 15,
-            value4: 10,
-            value5: 20,
-            colour: "purple",
+            value1: 10,
+            value2: 15,
+            value3: 20,
+            value4: 25,
+            colour: "red",
           },
           {
             name: "B",
@@ -50,7 +49,8 @@
         yAxisTicks: 10,                         //  optional (default is 5) (number of tickmarks on y axis)
         yAxisMaxValue: 100,                     //  optional (default is max data value + 10%, rounded up to nearest 10)
         dataAlign: "top",                       //  optional (default is mid) (vert alignment of data displayed on bars: "top", "mid", "bot")
-        dataColour: "yellow",                   //  optional (default is white) (background of data value displayed on bar)
+        // dataAlign currently broken by bug fix, needs refactoring
+        dataColour: "blue",                   //  optional (default is white) (background of data value displayed on bar)
         dataHide: true,                         //  optional (default is false) (toggles data displayed on bar - true will not display)
         barGap: 50,                             //  optional (default is 10%) (sets gap between bars in % - accepts 0-100)
       };

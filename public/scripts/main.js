@@ -52,20 +52,23 @@ const bars = function(data, dataAlign, dataColour) {
   if (!data.stack) {
     barOutput = `
     <div class="graph-bar-inner" style="${dataAlign} height: 100%;">
-      <div class="graph-value" style="${dataColour}">${data.value}</div>
+      <div style="${dataColour} position: relative; top: 50%;">${data.value}</div>
     </div>`
   }
   if (data.stack) {
     let index = 1;
+    let absPos = 0;
     while (!isNaN(data[`value${index}`])) {
       barValue = data[`value${index}`];
       barHeight = (barValue / data.value) * 100;
       barColour = data[`colour${index}`];
+      console.log(absPos);
       barOutput =
       `${barOutput}
-      <div class="graph-bar-inner" style="${dataAlign} height: ${barHeight}%; background: ${barColour};">
-        <div class="graph-value" style="${dataColour}">${barValue}</div>
-      </div>`;
+      <div class="graph-bar-inner" style="position: absolute; top: ${absPos}%; ${dataAlign} height: ${barHeight}%; background: ${barColour};"></div>
+      <div style="${dataColour} position: absolute; top: ${absPos}%; left: 50%; transform: translate(-50%); text-align: center;">${barValue}</div>
+      `;
+      absPos = absPos + barHeight;
       index++;
     }
   }
@@ -100,7 +103,7 @@ data.map((element, index) => {
     tempContainer.stack = true;
     let counter = 1;
     while (!isNaN(element[`value${counter}`])) {
-      let opacityVar = 30 + (30 * counter);
+      let opacityVar = 30 + (15 * counter);
       tempContainer[`value${counter}`] = element[`value${counter}`];
       tempContainer[`colour${counter}`] = (element[`colour${counter}`] ? element[`colour${counter}`] : `${tempContainer.colour}; filter: saturate(${opacityVar}%);`)
       counter++;
@@ -113,7 +116,7 @@ data.map((element, index) => {
 const parsedGraphData =
 `<!-- Dynamic elements: .graph-bar- width, height, background, align-items   .graph-value- background, value -->
 ${dataSet.map((element) => {
-  return `<div class="graph-bar" style="width: ${width}%; height: ${element.height}%; background: ${element.colour}">${bars(element, dataAlign, dataColour)}
+  return `<div class="graph-bar" style="position: relative; width: ${width}%; height: ${element.height}%; background: ${element.colour}">${bars(element, dataAlign, dataColour)}
   </div>`
 }).join('')}
 </div>`;
@@ -259,6 +262,9 @@ const setYAxis = function(data, options) {
 // - current colour palette limits 12 unique entries, either add more or instill limit on values
 // - check that all values are proper numbers
 // - test improper values being input across the board. Does it break everything? Does it throw an error? Should it?
+// - saturation to deliniate colours in stacked bar graph doesn't work well with many colours
+//    + at the very least change the default palette to have colours that work with it up to 6 stacks
+// - saturate also changes the label colour
 
 // STRETCH FEATURES
 // animations/prettification

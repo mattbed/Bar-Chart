@@ -49,9 +49,10 @@
 }
 
 .graph-bar {
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column-reverse;
+  justify-content: center; */
 }
 
 .graph-bar-inner {
