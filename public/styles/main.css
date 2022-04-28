@@ -50,6 +50,7 @@
 
 .graph-bar {
   position: relative;
+  box-shadow: 0.1em 0em 0.2em black;
 }
 
 .graph-bar-inner {
@@ -60,6 +61,11 @@
 .graph-bar-label {
   position: absolute;
   left: 50%;
+  padding: 0.1em;
+  text-align: center;
+  border: 0.05em solid black;
+  border-radius: 10%;
+  box-shadow: 0.1em 0.05em 0.2em black;
 }
 
 .x-axis {
