@@ -49,16 +49,11 @@
 }
 
 .graph-bar {
-  /* display: flex;
-  flex-wrap: wrap;
-  flex-direction: column-reverse;
-  justify-content: center; */
+  position: relative;
 }
 
 .graph-bar-inner {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  position: absolute;
   width: 100%;
 }
 

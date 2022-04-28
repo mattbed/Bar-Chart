@@ -51,9 +51,9 @@ const bars = function(data, dataAlign, dataColour) {
   let barOutput = "";
   if (!data.stack) {
     barOutput = `
-    <div class="graph-bar-inner" style="${dataAlign} height: 100%;">
-      <div style="${dataColour} position: relative; top: 50%;">${data.value}</div>
-    </div>`
+    <div class="graph-bar-inner" style="height: 100%;">
+    </div>
+    <div style="${dataColour} position: absolute; left: 50%; top: ${dataAlign}%; transform: translate(-50%, -${dataAlign}%);">${data.value}</div>`
   }
   if (data.stack) {
     let index = 1;
@@ -62,11 +62,11 @@ const bars = function(data, dataAlign, dataColour) {
       barValue = data[`value${index}`];
       barHeight = (barValue / data.value) * 100;
       barColour = data[`colour${index}`];
-      console.log(absPos);
+      absPosLabel = absPos + (barHeight * (dataAlign / 100))
       barOutput =
       `${barOutput}
-      <div class="graph-bar-inner" style="position: absolute; top: ${absPos}%; ${dataAlign} height: ${barHeight}%; background: ${barColour};"></div>
-      <div style="${dataColour} position: absolute; top: ${absPos}%; left: 50%; transform: translate(-50%); text-align: center;">${barValue}</div>
+      <div class="graph-bar-inner" style="top: ${absPos}%; height: ${barHeight}%; background: ${barColour};"></div>
+      <div style="${dataColour} position: absolute; top: ${absPosLabel}%; left: 50%; transform: translate(-50%, -${dataAlign}%);">${barValue}</div>
       `;
       absPos = absPos + barHeight;
       index++;
@@ -79,11 +79,11 @@ const bars = function(data, dataAlign, dataColour) {
 const parseData = function(data, options) {
 // set vertical alignment of data value if present (default center) to variable. include in output if not toggled false.
 const alignValue = () => {
-  if (options.dataAlign === "top") return "flex-start";
-  if (options.dataAlign === "mid") return "center";
-  if (options.dataAlign === "bot") return "flex-end";
+  if (options.dataAlign === "top") return 0;
+  if (options.dataAlign === "mid") return 50;
+  if (options.dataAlign === "bot") return 100;
 };
-const dataAlign = ( options.dataAlign ? `align-items: ${alignValue()};` : `align-items: center;`);
+const dataAlign = ( options.dataAlign ? alignValue() : 50);
 // set background colour of data value display to default white unless included otherwise
 const dataColour = ( options.dataColour ? `background: ${options.dataColour};` : `background: white;`);
 // fetch maxValue of y axis
@@ -116,7 +116,7 @@ data.map((element, index) => {
 const parsedGraphData =
 `<!-- Dynamic elements: .graph-bar- width, height, background, align-items   .graph-value- background, value -->
 ${dataSet.map((element) => {
-  return `<div class="graph-bar" style="position: relative; width: ${width}%; height: ${element.height}%; background: ${element.colour}">${bars(element, dataAlign, dataColour)}
+  return `<div class="graph-bar" style="width: ${width}%; height: ${element.height}%; background: ${element.colour}">${bars(element, dataAlign, dataColour)}
   </div>`
 }).join('')}
 </div>`;
