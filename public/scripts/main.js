@@ -38,30 +38,33 @@ const sumValues = function(data) {
 // checks if there is multiple values per bar (stacked bar graph), if so adds a total value column with sum of the values
 const checkStackedBar = function(data) {
   const parsedStackedBar = data;
-  data.forEach((element) => {
-    if (!element.value) {
-      element.value = sumValues(element);
-      element.stack = true;
-    }
-  });
+  if (isObject(data[0])) {
+    data.forEach((element) => {
+      if (!element.value) {
+        element.value = sumValues(element);
+        element.stack = true;
+        data.stack = true;
+      }
+    })
+  };
   return parsedStackedBar;
 }
 
-const bars = function(data, dataAlign, dataColour) {
+const bars = function(element, dataAlign, dataColour) {
   let barOutput = "";
-  if (!data.stack) {
+  if (!element.stack) {
     barOutput = `
     <div class="graph-bar-inner" style="height: 100%;"></div>
-    <div class="graph-bar-label" style="${dataColour} top: ${dataAlign}%; transform: translate(-50%, -${dataAlign}%);">${data.value}</div>
+    <div class="graph-bar-label" style="${dataColour} top: ${dataAlign}%; transform: translate(-50%, -${dataAlign}%);">${element.value}</div>
     `;
   }
-  if (data.stack) {
+  if (element.stack) {
     let index = 1;
     let absolutePosition = 0;
-    while (!isNaN(data[`value${index}`])) {
-      barValue = data[`value${index}`];
-      barHeight = (barValue / data.value) * 100;
-      barColour = data[`colour${index}`];
+    while (!isNaN(element[`value${index}`])) {
+      barValue = element[`value${index}`];
+      barHeight = (barValue / element.value) * 100;
+      barColour = element[`colour${index}`];
       absolutePositionLabel = absolutePosition + (barHeight * (dataAlign / 100));
       barOutput =
       `${barOutput}
@@ -88,15 +91,19 @@ const dataAlign = ( options.dataAlign ? alignValue() : 50);
 const dataColour = ( options.dataColour ? `background: ${options.dataColour};` : `background: white;`);
 // fetch maxValue of y axis
 let maxValue = maxValueCalc(data, options);
+let minValue = options.yAxisMinValue || 0;
+if (data.stack) {
+  minValue = 0;
+}
 // calculate width by dividing 100 by # of data points, then obtaining 90% of that value, add to dataset array
 const width = Math.round(((100 / (data.length)) * ( options.barGap >= 0 && options.barGap <= 100 ? (100 - options.barGap) / 100 : 0.9)) * 100) / 100;
-// create new dataset array (array of objects) with data values out of 100 (%) based on percent of maxValue
+// create new dataset array (array of objects) with data values out of 100 (%) based on percent of maxValue - minValue
 let dataSet = [];
 const colourPalette = ["red", "blue", "green", "orange", "purple", "yellow", "pink", "brown", "aqua", "fuchsia", "chartreuse", "rosybrown"]
 data.map((element, index) => {
   const tempContainer = {};
   actualValue = (isObject(data[0]) ? element.value : element);
-  tempContainer.height = Math.round((actualValue / maxValue) * 10000) / 100;
+  tempContainer.height = Math.round(((actualValue - minValue) / maxValue) * 10000) / 100;
   tempContainer.value = actualValue;
   tempContainer.colour = (element.colour ? element.colour : colourPalette[index]);
   if (element.stack) {
@@ -233,7 +240,10 @@ const maxValueCalc = function(data, options) {
 // Sets Y axis values and tickmarks (default is 5 tick marks, max value +10% rounded up to nearest 10 - these are customizable)
 const setYAxis = function(data, options) {
   const maxValue = maxValueCalc(data, options);
-  const minValue = options.yAxisMinValue || 0;
+  let minValue = options.yAxisMinValue || 0;
+  if (data.stack) {
+    minValue = 0;
+  }
   // number of marks
   const ticks = options.yAxisTicks || 5;
   const YValues = [];
