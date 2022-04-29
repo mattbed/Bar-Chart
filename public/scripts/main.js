@@ -232,13 +232,15 @@ const maxValueCalc = function(data, options) {
 
 // Sets Y axis values and tickmarks (default is 5 tick marks, max value +10% rounded up to nearest 10 - these are customizable)
 const setYAxis = function(data, options) {
-  let maxValue = maxValueCalc(data, options);
+  const maxValue = maxValueCalc(data, options);
+  const minValue = options.yAxisMinValue || 0;
   // number of marks
   const ticks = options.yAxisTicks || 5;
   const YValues = [];
   for (let x = 1; x <= ticks; x++) {
     // divide by number of ticks to get a default set of Y axis markers (x = max value/5 will get the first waypoint, 2x, 3x, 4x will be the next steps)
-    let value = (maxValue/ticks)*x;
+    const gap = (maxValue - minValue)/ticks
+    let value = minValue + (gap * x);
     YValues.unshift(value);
   };
   // map through and set each waypoint at the corresponding marker
