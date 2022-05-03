@@ -50,12 +50,12 @@ const checkStackedBar = function(data) {
   return parsedStackedBar;
 }
 
-const bars = function(element, dataAlign, dataColour) {
+const bars = function(element, dataAlign, dataColour, options) {
   let barOutput = "";
   if (!element.stack) {
     barOutput = `
     <div class="graph-bar-inner" style="height: 100%;"></div>
-    <div class="graph-bar-label" style="${dataColour} top: ${dataAlign}%; transform: translate(-50%, -${dataAlign}%);">${annotate(element.value)}</div>
+    <div class="graph-bar-label" style="${dataColour} top: ${dataAlign}%; transform: translate(-50%, -${dataAlign}%);">${annotate(element.value, options)}</div>
     `;
   }
   if (element.stack) {
@@ -69,7 +69,7 @@ const bars = function(element, dataAlign, dataColour) {
       barOutput =
       `${barOutput}
       <div class="graph-bar-inner" style="top: ${absolutePosition}%; height: ${barHeight}%; background: ${barColour};"></div>
-      <div class="graph-bar-label" style="${dataColour} top: ${absolutePositionLabel}%; transform: translate(-50%, -${dataAlign}%);">${annotate(barValue)}</div>
+      <div class="graph-bar-label" style="${dataColour} top: ${absolutePositionLabel}%; transform: translate(-50%, -${dataAlign}%);">${annotate(barValue, options)}</div>
       `;
       absolutePosition += barHeight;
       index++;
@@ -123,7 +123,7 @@ data.map((element, index) => {
 const parsedGraphData =
 `<!-- Dynamic elements: .graph-bar- width, height, background, align-items   .graph-value- background, value -->
 ${dataSet.map((element) => {
-  return `<div class="graph-bar" style="width: ${width}%; height: ${element.height}%; background: ${element.colour}">${bars(element, dataAlign, dataColour)}
+  return `<div class="graph-bar" style="width: ${width}%; height: ${element.height}%; background: ${element.colour}">${bars(element, dataAlign, dataColour, options)}
   </div>`
 }).join('')}
 </div>`;
@@ -131,19 +131,20 @@ return parsedGraphData;
 }
 
 // annotates given value with K, M, B, T for thousand, million, billion or trillion
-const annotate = function(value) {
+const annotate = function(value, options) {
   let parsedValue = value;
+  const mult = Math.pow(10, (options.annotateDecimals ? options.annotateDecimals : 1 ));
   if (value >= 1000 && value <= 999999) {
-    parsedValue = `${Math.round((value/1000) * 10) / 10}K`;
+    parsedValue = `${Math.round((value/1000) * mult) / mult}K`;
   }
   if (value >= 1000000 && value <= 999999999) {
-    parsedValue = `${Math.round((value/1000000) * 10) / 10}M`;
+    parsedValue = `${Math.round((value/1000000) * mult) / mult}M`;
   }
   if (value >= 1000000000 && value <= 999999999999) {
-    parsedValue = `${Math.round((value/1000000000) * 10) / 10}B`;
+    parsedValue = `${Math.round((value/1000000000) * mult) / mult}B`;
   }
   if (value >= 1000000000000 && value <= 999999999999999) {
-    parsedValue = `${Math.round((value/1000000000000) * 10) / 10}T`;
+    parsedValue = `${Math.round((value/1000000000000) * mult) / mult}T`;
   }
   return parsedValue;
 }
@@ -278,7 +279,7 @@ const setYAxis = function(data, options) {
       <!-- Dynamic elements: label-values -->
         ${YValues.map((element) => {
         return `<span class="label">
-        <span class="label-value">${annotate(element)}</span>
+        <span class="label-value">${annotate(element, options)}</span>
         </span>`}).join('')}
       </div>
     </section>`;

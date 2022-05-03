@@ -58,6 +58,9 @@
         dataColour: "blue",                   //  optional (default is white) (background of data value displayed on bar)
         dataHide: true,                         //  optional (default is false) (toggles data displayed on bar - true will not display)
         barGap: 50,                             //  optional (default is 10%) (sets gap between bars in % - accepts 0-100)
+        annotate: "US",                         //  optional (default is US) (options are US, UK, or False) (sets annotation type for large values - US is K, M, B, T; UK is k, m, bn, tn)
+        annotateDecimals: 2,                    //  optional (default is 1) (sets decimal places for annotated values)
+
       };
       const element=chart;                      //  mandatory (id name of element to append bar graph into)
       $(() => {
