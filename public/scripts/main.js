@@ -130,22 +130,20 @@ ${dataSet.map((element) => {
 return parsedGraphData;
 }
 
-// annotates given value with K, M, B, T for thousand, million, billion or trillion
+// annotates given value with K, M, B, T (or k, m, bn, tn for UK) for thousand, million, billion or trillion
+// input options include annotate for US, UK, or false; annotateDecimals for number of decimal places to round to
 const annotate = function(value, options) {
   let parsedValue = value;
+  if (!options.annotate) {
+    return parsedValue;
+  };
   const mult = Math.pow(10, (options.annotateDecimals ? options.annotateDecimals : 1 ));
-  if (value >= 1000 && value <= 999999) {
-    parsedValue = `${Math.round((value/1000) * mult) / mult}K`;
-  }
-  if (value >= 1000000 && value <= 999999999) {
-    parsedValue = `${Math.round((value/1000000) * mult) / mult}M`;
-  }
-  if (value >= 1000000000 && value <= 999999999999) {
-    parsedValue = `${Math.round((value/1000000000) * mult) / mult}B`;
-  }
-  if (value >= 1000000000000 && value <= 999999999999999) {
-    parsedValue = `${Math.round((value/1000000000000) * mult) / mult}T`;
-  }
+  let anno = ["K", "M", "B", "T"];
+  if (options.annotate === "UK") anno = ["k", "m", "bn", "tn"];
+  if (value >= 1000 && value <= 999999) parsedValue = `${Math.round((value/1000) * mult) / mult}${anno[0]}`;
+  if (value >= 1000000 && value <= 999999999) parsedValue = `${Math.round((value/1000000) * mult) / mult}${anno[1]}`;
+  if (value >= 1000000000 && value <= 999999999999) parsedValue = `${Math.round((value/1000000000) * mult) / mult}${anno[2]}`;
+  if (value >= 1000000000000 && value <= 999999999999999) parsedValue = `${Math.round((value/1000000000000) * mult) / mult}${anno[3]}`;
   return parsedValue;
 }
 
