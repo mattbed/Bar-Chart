@@ -55,7 +55,7 @@ const bars = function(element, dataAlign, dataColour) {
   if (!element.stack) {
     barOutput = `
     <div class="graph-bar-inner" style="height: 100%;"></div>
-    <div class="graph-bar-label" style="${dataColour} top: ${dataAlign}%; transform: translate(-50%, -${dataAlign}%);">${element.value}</div>
+    <div class="graph-bar-label" style="${dataColour} top: ${dataAlign}%; transform: translate(-50%, -${dataAlign}%);">${annotate(element.value)}</div>
     `;
   }
   if (element.stack) {
@@ -69,7 +69,7 @@ const bars = function(element, dataAlign, dataColour) {
       barOutput =
       `${barOutput}
       <div class="graph-bar-inner" style="top: ${absolutePosition}%; height: ${barHeight}%; background: ${barColour};"></div>
-      <div class="graph-bar-label" style="${dataColour} top: ${absolutePositionLabel}%; transform: translate(-50%, -${dataAlign}%);">${barValue}</div>
+      <div class="graph-bar-label" style="${dataColour} top: ${absolutePositionLabel}%; transform: translate(-50%, -${dataAlign}%);">${annotate(barValue)}</div>
       `;
       absolutePosition += barHeight;
       index++;
@@ -89,7 +89,7 @@ const alignValue = () => {
 const dataAlign = ( options.dataAlign ? alignValue() : 50);
 // set background colour of data value display to default white unless included otherwise
 const dataColour = ( options.dataColour ? `background: ${options.dataColour};` : `background: white;`);
-// fetch maxValue of y axis
+// fetch maxValue and minValue of y axis
 let maxValue = maxValueCalc(data, options);
 let minValue = options.yAxisMinValue || 0;
 if (data.stack) {
@@ -97,7 +97,7 @@ if (data.stack) {
 }
 // calculate width by dividing 100 by # of data points, then obtaining 90% of that value, add to dataset array
 const width = Math.round(((100 / (data.length)) * ( options.barGap >= 0 && options.barGap <= 100 ? (100 - options.barGap) / 100 : 0.9)) * 100) / 100;
-// create new dataset array (array of objects) with data values out of 100 (%) based on percent of maxValue - minValue
+// create new dataset array (array of objects) with data values out of 100 (%) based on percent of maxValue
 let dataSet = [];
 const colourPalette = ["red", "blue", "green", "orange", "purple", "yellow", "pink", "brown", "aqua", "fuchsia", "chartreuse", "rosybrown"]
 data.map((element, index) => {
@@ -128,6 +128,24 @@ ${dataSet.map((element) => {
 }).join('')}
 </div>`;
 return parsedGraphData;
+}
+
+// annotates given value with K, M, B, T for thousand, million, billion or trillion
+const annotate = function(value) {
+  let parsedValue = value;
+  if (value >= 1000 && value <= 999999) {
+    parsedValue = `${Math.round((value/1000) * 10) / 10}K`;
+  }
+  if (value >= 1000000 && value <= 999999999) {
+    parsedValue = `${Math.round((value/1000000) * 10) / 10}M`;
+  }
+  if (value >= 1000000000 && value <= 999999999999) {
+    parsedValue = `${Math.round((value/1000000000) * 10) / 10}B`;
+  }
+  if (value >= 1000000000000 && value <= 999999999999999) {
+    parsedValue = `${Math.round((value/1000000000000) * 10) / 10}T`;
+  }
+  return parsedValue;
 }
 
 // sort Data if sort = "asc" (ascending) or sort = "des" (descending), do not sort if sort is omitted or false
@@ -260,7 +278,7 @@ const setYAxis = function(data, options) {
       <!-- Dynamic elements: label-values -->
         ${YValues.map((element) => {
         return `<span class="label">
-        <span class="label-value">${element}</span>
+        <span class="label-value">${annotate(element)}</span>
         </span>`}).join('')}
       </div>
     </section>`;
@@ -268,17 +286,17 @@ const setYAxis = function(data, options) {
 }
 
 
-// FIX EVENTUALLY
+// BUGS/ISSUES/TEST
 // list of edge cases and other fixes to work on eventually
 // - check data inputs to see that they are all proper key/value pairs or all just values
 // - current colour palette limits 12 unique entries, either add more or instill limit on values
 // - check that all values are proper numbers
 // - test improper values being input across the board. Does it break everything? Does it throw an error? Should it?
+// - show 0 value on y axis?
 
 // STRETCH FEATURES
 // animations/prettification
-// custom min value for y axis
-// stacked bar graph? combined bars? etc.
 // add color schemes for bars to choose from (ie new colour palettes)
 // customizable label features, including colours for individual bars
 // add legend for stacked bar graph
+// negative values on y axis
