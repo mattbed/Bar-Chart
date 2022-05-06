@@ -1,7 +1,8 @@
 const drawBarChart = function(data, options, element) {
   const stackedData = checkStackedBar(data);
   const parsedData = sortData(stackedData, options);
-  const title = parseTitle(options);
+  const legend = parseLegend(parsedData, options);
+  const title = parseTitle(options, legend);
   const graphSetup = parseGraphSetup(options);
   const xAxis = parseXAxis(parsedData);
   const container = setGraphContainer(options);
@@ -48,6 +49,15 @@ const checkStackedBar = function(data) {
     })
   };
   return parsedStackedBar;
+}
+
+// checks if a legend is required, outputs one if it is
+const parseLegend = function(parsedData, options) {
+  let parsedLegend = "";
+  if (parsedData.stack) {
+    parsedLegend = `<section class="legend" style="border: 2px solid black">TEST</section>`;
+  }
+  return parsedLegend;
 }
 
 const bars = function(element, dataAlign, dataColour, options) {
@@ -208,17 +218,20 @@ const parseGraphSetup = function(options) {
 }
 
 // returns properly parsed title with attributes as included, or default values if not - nothing returned if no title is included
-const parseTitle = function(options) {
+const parseTitle = function(options, legend) {
   let parsedTitle = ""
   if (options.title) {
-    parsedTitle = `<section class="title">
+    parsedTitle = `<section class="title" style="display: flex; justify-content: flex-end; flex-direction: row;">
       <!-- Dynamic elements: font-size, color, font-family, VALUE-->
+      <div style="width: 100%">
       <p style="
       ${(options.titleFontSize ? "font-size: " + options.titleFontSize + "px;" : "font-size: 16px;")}
       ${(options.titleFontColour ? "color: " + options.titleFontColour + ";" : "color: black;")}
       ${(options.titleFont ? "font-family: " + options.titleFont + ";" : "")}">
       ${options.title}
       </p>
+      </div>
+      ${legend}
     </section>`
   }
   return parsedTitle;
