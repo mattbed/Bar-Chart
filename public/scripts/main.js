@@ -1,13 +1,13 @@
 const drawBarChart = function(data, options, element) {
   const stackedData = checkStackedBar(data);
   const parsedData = sortData(stackedData, options);
-  const legend = parseLegend(parsedData, options);
-  const title = parseTitle(options, legend);
   const graphSetup = parseGraphSetup(options);
   const xAxis = parseXAxis(parsedData);
   const container = setGraphContainer(options);
   const yAxis = setYAxis(data, options);
   const graphData = parseData(parsedData, options);
+  const legend = parseLegend(parsedData, options);
+  const title = parseTitle(options, legend);
   const $output=`<main class="container">
   ${container}
     ${title}
@@ -103,17 +103,22 @@ let dataSet = [];
 const colourPalette = ["red", "blue", "green", "orange", "purple", "yellow", "pink", "brown", "aqua", "fuchsia", "chartreuse", "rosybrown"]
 data.map((element, index) => {
   const tempContainer = {};
-  actualValue = (isObject(data[0]) ? element.value : element);
+  actualValue = (data.stack ? element.value : element);
   tempContainer.height = Math.round(((actualValue - minValue) / maxValue) * 10000) / 100;
   tempContainer.value = actualValue;
-  tempContainer.colour = (element.colour ? element.colour : colourPalette[index]);
+  if (data.stack) {
+    tempContainer.colour = (element.colour ? element.colour : colourPalette[0]);
+  } else if (!data.stack) {
+    tempContainer.colour = (element.colour ? element.colour : colourPalette[index]);
+  };
   if (element.stack) {
     tempContainer.stack = true;
     let counter = 1;
     while (!isNaN(element[`value${counter}`])) {
       let opacityVar = 30 + (15 * counter);
       tempContainer[`value${counter}`] = element[`value${counter}`];
-      tempContainer[`colour${counter}`] = (element[`colour${counter}`] ? element[`colour${counter}`] : `${tempContainer.colour}; filter: brightness(${opacityVar}%);`)
+      tempContainer[`colour${counter}`] = (element[`colour${counter}`] ? element[`colour${counter}`] : `${tempContainer.colour}; filter: brightness(${opacityVar}%);`);
+      data[index][`colour${counter}`] = (element[`colour${counter}`] ? element[`colour${counter}`] : `${tempContainer.colour}; filter: brightness(${opacityVar}%);`);
       counter++;
     }
   }
@@ -211,12 +216,22 @@ const parseGraphSetup = function(options) {
 // checks if a legend is required, outputs one if it is
 const parseLegend = function(parsedData, options) {
   let parsedLegend = "";
-  if (parsedData.stack) {
+  if (options.legend) {
+    let i = 1;
+    let legendBody = "";
+    while (parsedData[0][`value${i}`]) {
+      const legendKey = options.legend[`value${i}`];
+      const legendColour = parsedData[0][`colour${i}`];
+      legendBody += `
+      <div style="display: flex; flex-wrap: no-wrap; align-items: center;">
+        <div class="legend-item" style="height: 9px; width: 9px; background-color: ${legendColour};">
+        </div>
+        <p style="font-size: 10px; margin: 3px;">${legendKey}</p>
+      </div>`;
+      i++;
+    }
     parsedLegend = `<section class="legend" style="display: flex; flex-flow: row wrap; align-content: stretch; gap: 3px; border: 2px solid black; padding: 3px; margin: 1px;">
-    <div style="display: flex; flex-wrap: no-wrap; align-items: center;"><div class="legend-item" style="height: 6px; width: 6px; background-color: blue;"></div><p style="font-size: 8px; margin: 3px;">Item 1 Long Name Test Lorem Ipsum</p></div>
-    <div style="display: flex; flex-wrap: no-wrap; align-items: center;"><div class="legend-item" style="height: 6px; width: 6px; background-color: red;"></div><p style="font-size: 8px; margin: 3px;">Item 2</p></div>
-    <div style="display: flex; flex-wrap: no-wrap; align-items: center;"><div class="legend-item" style="height: 6px; width: 6px; background-color: green;"></div><p style="font-size: 8px; margin: 3px;">Item 3</p></div>
-    <div style="display: flex; flex-wrap: no-wrap; align-items: center;"><div class="legend-item" style="height: 6px; width: 6px; background-color: orange;"></div><p style="font-size: 8px; margin: 3px;">Item 4</p></div>
+    ${legendBody}
     </section>`;
   }
   return parsedLegend;

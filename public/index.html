@@ -25,12 +25,16 @@
             value3: 20,
             value4: 25,
             value5: 15,
-            colour: "orange",
+            // colour: "orange",
           },
           {
             name: "B",
-            value: 50,
-            colour: "fuchsia",
+            value1: 10,
+            value2: 20,
+            value3: 5,
+            value4: 5,
+            value5: 15,
+            // colour: "fuchsia",
           },
           {
             name: "C",
@@ -39,9 +43,11 @@
           }];                                   //  mandatory (array of numbers as values or array of objects with titles as keys and numbers as values)
                                                 //  name and colour are optional. Name must be consistent: always present or always absent.
                                                 //  stacked bar graph created using value1, value2, etc. within the same data set
-                                                //  colours for stacked bar graph will be set to be different automatically using variable brightness, but becomes
-                                                //  indistinguishable after 5-10 unique entries (depending on which colour). Colours can be set manually
+                                                //  colours for stacked bar graph will be set to be one default colour automatically using variable brightness, but becomes
+                                                //  indistinguishable after 5-10 unique entries (depending on which colour). Colours of individual stacks can be set manually
                                                 //  using the same method as values: colour1, colour2, etc.
+                                                //  Highly advised to keep all unique bars the same colour scheme, with individual stacks being unique
+                                                //  ie all colour:, colour1:, colour2: keys have the same values
       const options={
         title: "Test title",                    //  optional (default is no title)
         titleFont: "Arial",                     //  optional (default is browser default)
@@ -60,7 +66,13 @@
         barGap: 50,                             //  optional (default is 10%) (sets gap between bars in % - accepts 0-100)
         annotate: "US",                         //  optional (default is US) (options are US, UK, or False) (sets annotation type for large values - US is K, M, B, T; UK is k, m, bn, tn)
         annotateDecimals: 2,                    //  optional (default is 1) (sets decimal places for annotated values)
-
+        legend: {
+          value1: "This is bar 1",
+          value2: "This is bar 2",
+          value3: "And bar 3",
+          value4: "Bar 4",
+          value5: "And finally, bar 5",
+        },                                      //  optional (default is no legend) (used for stacked bar graph to denote legend keys, value pairs should match up with stacked bar graph data entries)
       };
       const element=chart;                      //  mandatory (id name of element to append bar graph into)
       $(() => {
