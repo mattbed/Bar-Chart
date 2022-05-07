@@ -51,15 +51,6 @@ const checkStackedBar = function(data) {
   return parsedStackedBar;
 }
 
-// checks if a legend is required, outputs one if it is
-const parseLegend = function(parsedData, options) {
-  let parsedLegend = "";
-  if (parsedData.stack) {
-    parsedLegend = `<section class="legend" style="border: 2px solid black">TEST</section>`;
-  }
-  return parsedLegend;
-}
-
 const bars = function(element, dataAlign, dataColour, options) {
   let barOutput = "";
   if (!element.stack) {
@@ -215,6 +206,20 @@ const parseGraphSetup = function(options) {
     <div class="graph-border" style="background: ${options.graphBackground};">`
   }
   return parsedGraph;
+}
+
+// checks if a legend is required, outputs one if it is
+const parseLegend = function(parsedData, options) {
+  let parsedLegend = "";
+  if (parsedData.stack) {
+    parsedLegend = `<section class="legend" style="display: flex; flex-flow: row wrap; align-content: stretch; gap: 3px; border: 2px solid black; padding: 3px; margin: 1px;">
+    <div style="display: flex; flex-wrap: no-wrap; align-items: center;"><div class="legend-item" style="height: 6px; width: 6px; background-color: blue;"></div><p style="font-size: 8px; margin: 3px;">Item 1 Long Name Test Lorem Ipsum</p></div>
+    <div style="display: flex; flex-wrap: no-wrap; align-items: center;"><div class="legend-item" style="height: 6px; width: 6px; background-color: red;"></div><p style="font-size: 8px; margin: 3px;">Item 2</p></div>
+    <div style="display: flex; flex-wrap: no-wrap; align-items: center;"><div class="legend-item" style="height: 6px; width: 6px; background-color: green;"></div><p style="font-size: 8px; margin: 3px;">Item 3</p></div>
+    <div style="display: flex; flex-wrap: no-wrap; align-items: center;"><div class="legend-item" style="height: 6px; width: 6px; background-color: orange;"></div><p style="font-size: 8px; margin: 3px;">Item 4</p></div>
+    </section>`;
+  }
+  return parsedLegend;
 }
 
 // returns properly parsed title with attributes as included, or default values if not - nothing returned if no title is included
