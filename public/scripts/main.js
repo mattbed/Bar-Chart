@@ -213,7 +213,7 @@ const parseGraphSetup = function(options) {
   return parsedGraph;
 }
 
-// checks if a legend is required, outputs one if it is
+// checks if a legend is required, outputs one if it is (based on colours applied to first bar, as they should all match)
 const parseLegend = function(parsedData, options) {
   let parsedLegend = "";
   if (options.legend) {
@@ -223,14 +223,14 @@ const parseLegend = function(parsedData, options) {
       const legendKey = options.legend[`value${i}`];
       const legendColour = parsedData[0][`colour${i}`];
       legendBody += `
-      <div style="display: flex; flex-wrap: no-wrap; align-items: center;">
-        <div class="legend-item" style="height: 9px; width: 9px; background-color: ${legendColour};">
+      <div class="legend-item-container">
+        <div class="legend-item" style="background-color: ${legendColour};">
         </div>
-        <p style="font-size: 10px; margin: 3px;">${legendKey}</p>
+        <p>${legendKey}</p>
       </div>`;
       i++;
     }
-    parsedLegend = `<section class="legend" style="display: flex; flex-flow: row wrap; align-content: stretch; gap: 3px; border: 2px solid black; padding: 3px; margin: 1px;">
+    parsedLegend = `<section class="legend">
     ${legendBody}
     </section>`;
   }

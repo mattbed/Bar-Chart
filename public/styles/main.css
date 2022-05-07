@@ -80,3 +80,29 @@
   flex-grow: 1;
   text-align: center;
 }
+
+.legend {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: stretch;
+  gap: 3px;
+  border: 2px solid black;
+  padding: 3px;
+  margin: 1px;
+}
+
+.legend-item {
+  height: 9px;
+  width: 9px;
+}
+
+.legend-item-container {
+  display: flex;
+  flex-wrap: no-wrap;
+  align-items: center;
+}
+
+.legend-item-container p {
+  font-size: 10px;
+  margin: 3px;
+}
