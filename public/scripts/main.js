@@ -54,9 +54,10 @@ const checkStackedBar = function(data) {
 const bars = function(element, dataAlign, dataColour, options) {
   let barOutput = "";
   if (!element.stack) {
+    const showDataLabel = `<div class="graph-bar-label" style="${dataColour} top: ${dataAlign}%; transform: translate(-50%, -${dataAlign}%);">${annotate(element.value, options)}</div>`;
     barOutput = `
     <div class="graph-bar-inner" style="height: 100%;"></div>
-    <div class="graph-bar-label" style="${dataColour} top: ${dataAlign}%; transform: translate(-50%, -${dataAlign}%);">${annotate(element.value, options)}</div>
+    ${(options.dataHide ? "" : showDataLabel)}
     `;
   }
   if (element.stack) {
@@ -67,10 +68,11 @@ const bars = function(element, dataAlign, dataColour, options) {
       barHeight = (barValue / element.value) * 100;
       barColour = element[`colour${index}`];
       absolutePositionLabel = absolutePosition + (barHeight * (dataAlign / 100));
+      const showDataLabel = `<div class="graph-bar-label" style="${dataColour} top: ${absolutePositionLabel}%; transform: translate(-50%, -${dataAlign}%);">${annotate(barValue, options)}</div>`;
       barOutput =
       `${barOutput}
       <div class="graph-bar-inner" style="top: ${absolutePosition}%; height: ${barHeight}%; background: ${barColour};"></div>
-      <div class="graph-bar-label" style="${dataColour} top: ${absolutePositionLabel}%; transform: translate(-50%, -${dataAlign}%);">${annotate(barValue, options)}</div>
+      ${(options.dataHide ? "" : showDataLabel)}
       `;
       absolutePosition += barHeight;
       index++;
