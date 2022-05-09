@@ -8,13 +8,13 @@ This simple API takes in a few parameters and outputs a bar graph for use on you
 
 Place main.js into your scripts folder, and main.css into your styles folder. Assuming your folder structure has your html file as a sibling to your styles and scripts folders, the following will work - otherwise the href and src will need to be adjusted.
 
-Within your html head, paste the following:
-> <link rel="stylesheet" href="./styles/main.css" type="text/css" />  
-> <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
-> <script type="text/javascript" src="./scripts/main.js"></script>  
+Within your html head, paste the following:  
+> `<link rel="stylesheet" href="./styles/main.css" type="text/css" />`  
+> `<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>`  
+> `<script type="text/javascript" src="./scripts/main.js"></script>`  
 
-Within your html body, paste the following:
-> <script type="text/javascript">  
+Within your html body, paste the following:  
+> `<script type="text/javascript">`  
 > const data = [  
 > ];  
 > const options = {  
@@ -23,7 +23,7 @@ Within your html body, paste the following:
 > $(() => {  
 >   drawBarChart(data, options, element);  
 > });  
-> </script>  
+> `</script>`  
 
 ## Input
 
@@ -32,7 +32,9 @@ Within your html body, paste the following:
 - data  
     *Data must be provided as positive numbers (decimals allowed) enclosed in square array [] brackets. This can be input as a simple array of numbers with each number being a bar value for a very simple bar graph, but this will severely limit your ability to edit individual features. For additional features, an array of objects should be used. Each individual bar will be enclosed within its own object enclosed in curly brackets {}, with values being stored under keys for either 'value' for single bar graph, or 'value1', 'value2', etc. for stacked bar graphs. All data must be presented consistently: either all with one value, or all with the same number of stacks with stacked bar values. Further optional keys can be included, as described in the Optional section below. For example:*
     > const data = [20,54,89];  
+    
     *or*  
+
     > const data = [  
     >      {  
     >        value: 20,  
@@ -44,7 +46,9 @@ Within your html body, paste the following:
     >        value: 89,  
     >      }  
     >];  
+
     *or*  
+
     > const data = [  
     >      {  
     >        value1: 5,  
@@ -104,7 +108,9 @@ Within your html body, paste the following:
     >        value: 89,  
     >      }  
     >];  
+
     *or*  
+    
     > const data = [  
     >      {  
     >        value1: 5,  
