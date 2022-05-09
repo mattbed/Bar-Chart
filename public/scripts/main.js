@@ -109,7 +109,8 @@ data.map((element, index) => {
   if (data.stack) {
     tempContainer.colour = (element.colour ? element.colour : colourPalette[0]);
   } else if (!data.stack) {
-    tempContainer.colour = (element.colour ? element.colour : colourPalette[index]);
+    let indexRepeating = index - (12 * Math.floor(index / 12));
+    tempContainer.colour = (element.colour ? element.colour : colourPalette[indexRepeating]);
   };
   if (element.stack) {
     tempContainer.stack = true;
@@ -330,5 +331,4 @@ const setYAxis = function(data, options) {
 // animations/prettification
 // add color schemes for bars to choose from (ie new colour palettes)
 // customizable label features, including colours for individual bars
-// add legend for stacked bar graph
 // negative values on y axis
