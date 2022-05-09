@@ -318,19 +318,4 @@ const setYAxis = function(data, options) {
       </div>
     </section>`;
   return parsedYAxis;
-}
-
-
-// BUGS/ISSUES/TEST
-// list of edge cases and other fixes to work on eventually
-// - check data inputs to see that they are all proper key/value pairs or all just values
-// - current colour palette limits 12 unique entries, either add more or instill limit on values
-// - check that all values are proper numbers
-// - test improper values being input across the board. Does it break everything? Does it throw an error? Should it?
-// - show 0 value on y axis?
-
-// STRETCH FEATURES
-// animations/prettification
-// add color schemes for bars to choose from (ie new colour palettes)
-// customizable label features, including colours for individual bars
-// negative values on y axis
+};
